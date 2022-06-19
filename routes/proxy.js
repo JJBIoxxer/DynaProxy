@@ -1,7 +1,7 @@
 const express = require("express")
 const axios = require("axios")
 
-const Response = require("../classes/Response")
+//const Response = require("../classes/Response")
 const HttpError = require("../classes/HttpError")
 const AllowedMethods = require("../config/AllowedMethods.json")
 
