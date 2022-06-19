@@ -15,8 +15,7 @@ router.use(async (req, res, next) => {
 
     try {
         axios({
-            url: request.path,
-            baseUrl: request.target,
+            url: request.url,
             method: req.method.toLowerCase(),
             headers: request.headers,
             body: request.body
