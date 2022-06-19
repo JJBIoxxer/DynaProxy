@@ -12,5 +12,5 @@ app.get("/", (req, res, next) => res.send("Welcome to DynaProxy!"))
 app.use("/proxy", proxyRouter)
 app.use(errorHandler)
 
-const PORT = 5462
-app.listen(PORT, () => console.log(`App started on port ${PORT}...`))
+const port = process.env.PORT || 5462
+app.listen(port, () => console.log(`App started on port ${port}...`))
