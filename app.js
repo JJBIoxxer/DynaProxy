@@ -7,9 +7,7 @@ const app = express()
 
 app.use(express.json())
 
-app.get("/", (req, res, next) => res.send("Welcome to DynaProxy!"))
-
-app.use("/proxy", proxyRouter)
+app.use("/", proxyRouter)
 app.use(errorHandler)
 
 const port = process.env.PORT || 5462

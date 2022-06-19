@@ -1,30 +1,56 @@
 const express = require("express")
 const axios = require("axios")
 
+const Response = require("../classes/Response")
 const HttpError = require("../classes/HttpError")
-const ALLOWED_METHODS = require("../config/AllowedMethods.json")
+const AllowedMethods = require("../config/AllowedMethods.json")
 
 const router = express.Router()
 
-router.use(async (req, res, next) => {
-    if (!ALLOWED_METHODS.includes(req.method)) {
+const authenticator = (req, res, next) => {
+    console.log(process.env)
+    next()
+}
+
+const requestHandler = async (req, res, next) => {
+    const { method } = req, request = req.body
+
+    if (!AllowedMethods.includes(method)) {
         next( new HttpError("Method Not Allowed", 405) )
     }
-
-    const request = req.body
-
+    
     try {
         axios({
             url: request.url,
-            method: req.method.toLowerCase(),
+            method: method.toLowerCase(),
             headers: request.headers,
             body: request.body
-        }).then(response => {
-            return res.send(response.data)
+        })
+        .then(response => {
+            res.response = response
+            next()
+        })
+        .catch(err => {
+            res.response = err.response
+            next()
         })
     } catch (err) {
         next( new HttpError(err.message, 500) )
     }
-})
+}
+
+const responseHandler = (req, res, next) =>{
+    const { response } = res
+    res.status(response.status).json({
+        status: {
+            code: response.status,
+            message: response.statusText
+        },
+        headers: response.headers,
+        body: response.data
+    })
+}
+
+router.use(authenticator, requestHandler, responseHandler)
 
 module.exports = router
