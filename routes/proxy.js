@@ -1,15 +1,17 @@
 const express = require("express")
 const axios = require("axios")
 
-//const Response = require("../classes/Response")
+const Response = require("../classes/Response")
 const HttpError = require("../classes/HttpError")
 const AllowedMethods = require("../config/AllowedMethods.json")
 
 const router = express.Router()
 
 const authenticator = (req, res, next) => {
-    console.log(process.env)
-    next()
+    const authToken = req.headers["proxy_auth_token"]
+    if (authToken != process.env.PROXY_AUTH_TOKEN) {
+        return res.status(403).send("403 | Not Authorized")
+    }
 }
 
 const requestHandler = async (req, res, next) => {
