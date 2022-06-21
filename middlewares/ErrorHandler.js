@@ -1,8 +1,7 @@
 module.exports = (err, req, res, next) => {
-    return res.status(err.statusCode || 500).json({
-        error: {
-            message: err.message,
-            stack: err.stack
-        }
-    })
+    res.locals.statusCode = err.statusCode,
+    res.locals.body = {
+        error: err.message
+    }
+    next()
 }
