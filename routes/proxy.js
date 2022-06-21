@@ -10,7 +10,7 @@ const router = express.Router()
 const authenticator = (req, res, next) => {
     const authToken = req.headers["proxy_auth_token"]
     if (authToken != process.env.PROXY_AUTH_TOKEN) {
-        return res.status(403).send("401 - Unauthorized: Access is denied due to invalid credentials.")
+        return res.status(403).send("<h2>401 - Unauthorized: Access is denied due to invalid credentials.</h2>")
     }
 }
 
